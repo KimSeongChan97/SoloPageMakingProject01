@@ -1,0 +1,84 @@
+페이지 만들기 개인 미니 프로젝트
+
+진행중 입니다.
+
+
+```
+
+DOM 트리 구조
+DOM 트리 구조는 웹 애플리케이션의 웹 페이지 파일을 기준으로 설명될 수 있습니다. 주요 웹 페이지 파일들은 다음과 같습니다:
+
+index.jsp
+mainpage.html
+boardList.jsp (게시판 목록 페이지)
+boardView.jsp (게시판 상세 페이지)
+memberLoginForm.jsp (로그인 폼)
+memberWriteForm.jsp (회원 가입 폼)
+이러한 파일들을 기준으로 각각의 JSP와 HTML 파일의 DOM 트리 구조를 설명하겠습니다. 일반적으로 DOM 트리는 HTML, CSS, 자바스크립트 파일을 기반으로 구성됩니다.
+
+index.jsp:
+
+<html>
+<head>
+<title>
+<link> (CSS 파일 연결)
+<body>
+<div> (메인 컨텐츠를 감싸는 div)
+<nav> (네비게이션)
+<section> (메인 페이지 컨텐츠)
+<footer> (페이지 하단)
+boardList.jsp:
+
+<html>
+<head> (CSS 연결)
+<body>
+<table> (게시판 목록을 보여주는 테이블)
+<tr> (게시글 제목 및 번호 등의 목록)
+memberLoginForm.jsp:
+
+<html>
+<head> (CSS 연결)
+<body>
+<form> (로그인 폼)
+<input> (아이디 및 비밀번호 입력란)
+이 구조들은 각 JSP 파일의 HTML 태그들을 나열하며, 트리 구조로 DOM을 구성하고 있습니다. 각 웹 페이지는 HTML 요소들로 이루어져 있고, 그 안에 자바스크립트와 CSS가 적용되어 DOM 트리를 구성합니다.
+
+
+```
+
+게시판 테이블
+CREATE TABLE board(
+    seq NUMBER NOT NULL,            -- 글번호 (고유 식별자)
+    id VARCHAR2(20) NOT NULL,       -- 작성자 아이디
+    name VARCHAR2(40) NOT NULL,     -- 작성자 이름
+    email VARCHAR2(40),             -- 작성자 이메일
+    subject VARCHAR2(255) NOT NULL, -- 게시글 제목
+    content VARCHAR2(4000) NOT NULL,-- 게시글 내용
+    ref NUMBER NOT NULL,            -- 그룹 번호 (답글 그룹)
+    lev NUMBER DEFAULT 0 NOT NULL,  -- 답글 단계
+    step NUMBER DEFAULT 0 NOT NULL, -- 답글 순서
+    pseq NUMBER DEFAULT 0 NOT NULL, -- 원글 번호 (답글일 경우)
+    reply NUMBER DEFAULT 0 NOT NULL,-- 답변수
+    hit NUMBER DEFAULT 0,           -- 조회수
+    logtime DATE DEFAULT SYSDATE    -- 작성 시간
+);
+
+회원 테이블
+CREATE TABLE member(
+    name VARCHAR2(20) NOT NULL,     -- 회원 이름
+    id VARCHAR2(20) PRIMARY KEY,    -- 회원 ID (고유 식별자)
+    pwd VARCHAR2(20) NOT NULL,      -- 비밀번호
+    gender VARCHAR2(10),            -- 성별
+    email1 VARCHAR2(20),            -- 이메일 앞부분
+    email2 VARCHAR2(20),            -- 이메일 뒷부분
+    tel1 VARCHAR2(10),              -- 전화번호 앞자리
+    tel2 VARCHAR2(10),              -- 전화번호 중간자리
+    tel3 VARCHAR2(10),              -- 전화번호 뒷자리
+    zipcode VARCHAR2(10),           -- 우편번호
+    addr1 VARCHAR2(100),            -- 주소 기본 정보
+    addr2 VARCHAR2(100),            -- 주소 상세 정보
+    logtime DATE                    -- 가입 시간
+);
+
+
+
