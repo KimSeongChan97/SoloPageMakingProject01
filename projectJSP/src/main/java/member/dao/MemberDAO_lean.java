@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 
 import member.bean.MemberDTO;
 
-public class MemberDAO {
+public class MemberDAO_lean {
 
     // 1. 싱글톤 인스턴스 생성 (static으로 유일한 인스턴스를 유지)
     // 싱글톤 패턴을 사용하여 애플리케이션 내에서 MemberDAO의 인스턴스를 하나만 유지하고 사용하기 위함입니다.
@@ -20,7 +20,7 @@ public class MemberDAO {
     // static으로 선언된 memberDAO는 클래스가 메모리에 로드될 때 딱 한 번만 생성됩니다. 다른 클래스에서 이 인스턴스를 공유하여 사용할 수 있습니다.
     // 추가 주석: 싱글톤 패턴은 애플리케이션에서 전역적으로 한 번만 객체가 생성되도록 보장하는 디자인 패턴입니다. 
     // 이를 통해 자원의 낭비를 방지하고 일관성을 유지합니다. 이를 통해 여러 객체가 MemberDAO를 동시에 사용해도 문제가 발생하지 않도록 보장합니다.
-    private static MemberDAO memberDAO = new MemberDAO();
+    private static MemberDAO_lean memberDAO = new MemberDAO_lean();
 
     // 2. DataSource 객체 선언
     // DataSource는 Connection Pool을 통해 DB 연결을 효율적으로 관리합니다.
@@ -46,7 +46,7 @@ public class MemberDAO {
     // getInstance 메서드를 통해 언제 어디서든 같은 객체를 반환하여 MemberDAO의 인스턴스는 하나만 존재하게 됩니다.
     // 추가 주석: getInstance()는 클래스 내에 선언된 인스턴스를 반환하며, 객체가 두 번 이상 생성되지 않도록 보장합니다. 
     // 이 방식을 통해 애플리케이션 전반에서 같은 MemberDAO 인스턴스를 공유하여 사용할 수 있게 됩니다.
-    public static MemberDAO getInstance() {
+    public static MemberDAO_lean getInstance() {
         return memberDAO;
     }
 
@@ -56,7 +56,7 @@ public class MemberDAO {
     // JNDI를 이용하여 서버 환경에 설정된 DataSource 자원을 가져와 데이터베이스 연결을 관리하게 됩니다.
     // 추가 주석: InitialContext는 JNDI 서비스로부터 자원을 검색할 수 있도록 해주는 클래스입니다. 
     // 이 예제에서는 "java:comp/env/jdbc/oracle"이라는 이름으로 등록된 DataSource를 가져오고 있습니다.
-    public MemberDAO() {
+    public MemberDAO_lean() {
         try {
             Context ctx = new InitialContext(); // JNDI 초기화
             // DataSource를 JNDI를 통해 찾아옵니다. "jdbc/oracle"은 서버 설정에서 정의된 자원의 이름입니다.
@@ -180,19 +180,10 @@ public class MemberDAO {
     // 로그인 시 입력한 아이디와 비밀번호가 DB에 존재하는지 확인하는 메서드입니다.
     // 로그인 성공 시 회원의 이름을 반환하고, 실패 시 null을 반환합니다.
     // 추가 주석: 이 메서드는 사용자가 입력한 아이디와 비밀번호가 DB에 일치하는지 확인하여 일치하면 해당 회원의 이름을 반환합니다.
-    public String[] memberLogin(String id, String pwd) {
-    	// public MemberDTO memberLogin(String id, String pwd) {
+    public MemberDTO memberLogin(String id, String pwd) {
     	
-    	String[] loginInfo = new String[3]; // [0] = name, [1] = email1, [2] = email2
+    	MemberDTO memberDTO = null;
     	
-    	// MemberDTO memberDTO = null;
-    	
-    	/*
-        String name = null; // 로그인 성공 시 반환할 회원의 이름, 기본값은 null
-        String email1 = null; // 로그인 성공 시 반환할 회원의 이메일 앞부분
-        String email2 = null; // 로그인 성공 시 반환할 회원의 이메일 뒷부분
-		*/
-		
         String sql = "SELECT * FROM member WHERE id=? AND pwd=?"; // 아이디와 비밀번호가 일치하는 회원 정보를 조회하는 SQL 쿼리문
 
         try {
@@ -205,33 +196,20 @@ public class MemberDAO {
             rs = pstmt.executeQuery(); // 쿼리를 실행하여 결과를 ResultSet으로 받습니다.
 
             if (rs.next()) { // 쿼리 결과가 존재할 경우, 즉 로그인에 성공했을 경우
-            	// memberDTO.setName("name";
-            	//memberDTO.setId(rs.getString("id"));
-            	//memberDTO.setPwd(rs.getString("pwd"));
-            	//memberDTO.setGender(rs.getString("gender"));
-            	//memberDTO.setEmail1(rs.getString("email1"));
-            	//memberDTO.setEmail2(rs.getString("email2"));
-            	//memberDTO.setTel1(rs.getString("tel1"));
-            	//memberDTO.setTel2(rs.getString("tel2"));
-            	//memberDTO.setTel3(rs.getString("tel3"));
-            	//memberDTO.setZipcode(rs.getString("zipcode"));
-            	//memberDTO.setAddr1(rs.getString("addr1"));
-            	// memberDTO.setAddr2(rs.getString("addr2"));
+            	memberDTO = new MemberDTO();
             	
-            	loginInfo[0] = rs.getString("name");
-                loginInfo[1] = rs.getString("email1");
-                loginInfo[2] = rs.getString("email2");
-            	/*
-                name = rs.getString("name"); // 로그인 성공 시 회원 이름을 반환
-                email1 = rs.getString("email1"); // 이메일 앞부분 설정
-                email2 = rs.getString("email2"); // 이메일 뒷부분 설정
-                */
-                // 세션에 값을 저장하는 부분은 로그인 성공 시 처리하는 JSP에서 구현해야 함
-                // 예시: session.setAttribute("memEmail1", email1);
-                // 예시: session.setAttribute("memEmail2", email2);
-            } else {
-                // 로그인 실패 시
-                loginInfo[0] = null;  // 이름이 null인 경우, 로그인 실패로 간주
+            	memberDTO.setName("name");
+            	memberDTO.setId(rs.getString("id"));
+            	memberDTO.setPwd(rs.getString("pwd"));
+            	memberDTO.setGender(rs.getString("gender"));
+            	memberDTO.setEmail1(rs.getString("email1"));
+            	memberDTO.setEmail2(rs.getString("email2"));
+            	memberDTO.setTel1(rs.getString("tel1"));
+            	memberDTO.setTel2(rs.getString("tel2"));
+            	memberDTO.setTel3(rs.getString("tel3"));
+            	memberDTO.setZipcode(rs.getString("zipcode"));
+            	memberDTO.setAddr1(rs.getString("addr1"));
+            	memberDTO.setAddr2(rs.getString("addr2"));
             }
             
         } catch (SQLException e) {
@@ -249,72 +227,67 @@ public class MemberDAO {
             }
         }
         
-        return loginInfo;
-        /*
-        return name; // 로그인 성공 시 이름 반환, 실패 시 null 반환
-        // return memberDTO;
-        */
+        return memberDTO;
     }
     
-	    // 회원 정보를 가져오는 메서드
-	    public MemberDTO getMember(String id) {
-	    	
-	    	MemberDTO memberDTO = null;
-	    	
-	    	String sql = "select * from member where id=?";
-	    	
-	    	try {
-	    		// Connection Pool에서 연결을 가져옵니다.
-				con = ds.getConnection();
-				
-				// SQL 쿼리를 준비합니다.
-				pstmt = con.prepareStatement(sql);
-				
-				pstmt.setString(1, id);
+    // 회원 정보를 가져오는 메서드
+    public MemberDTO getMember(String id) {
+    	
+    	MemberDTO memberDTO = null;
+    	
+    	String sql = "select * from member where id=?";
+    	
+    	try {
+    		// Connection Pool에서 연결을 가져옵니다.
+			con = ds.getConnection();
+			
+			// SQL 쿼리를 준비합니다.
+			pstmt = con.prepareStatement(sql);
+			
+			pstmt.setString(1, id);
 
-				// 쿼리를 실행하여 결과를 ResultSet으로 받습니다.
-	            rs = pstmt.executeQuery();
-	            
-	            if (rs.next()) {
-	            	memberDTO = new MemberDTO(); // null 값인 DTO를 새로 생성
-	            	
-	            	memberDTO.setName(rs.getString("name"));
-	            	memberDTO.setId(rs.getString("id"));
-	            	memberDTO.setPwd(rs.getString("pwd"));
-	            	memberDTO.setGender(rs.getString("gender"));
-	            	memberDTO.setEmail1(rs.getString("email1"));
-	            	memberDTO.setEmail2(rs.getString("email2"));
-	            	memberDTO.setTel1(rs.getString("tel1"));
-	            	memberDTO.setTel2(rs.getString("tel2"));
-	            	memberDTO.setTel3(rs.getString("tel3"));
-	            	memberDTO.setZipcode(rs.getString("zipcode"));
-	            	memberDTO.setAddr1(rs.getString("addr1"));
-	            	memberDTO.setAddr2(rs.getString("addr2"));
-       	
-	            } // rs 의 값이 없으면 null
-			} catch (SQLException e) {
-				
-				e.printStackTrace(); 
-			} finally {
-	            // 자원 해제
-	            // ResultSet, PreparedStatement, Connection 객체는 사용 후 반드시 닫아야 자원 누수를 방지할 수 있습니다.
-	            // ResultSet도 자원을 차지하므로 반드시 닫아야 합니다. 이를 닫지 않으면 시스템 리소스를 낭비하게 됩니다.
-	            try {
-	                if (rs != null) rs.close();  // ResultSet 해제
-	                if (pstmt != null) pstmt.close(); // PreparedStatement 해제
-	                if (con != null) con.close();  // Connection 해제
-	            } catch (SQLException e) {
-	                e.printStackTrace();
-	            }
-	        }
-	    		
-	    	return memberDTO;
+			// 쿼리를 실행하여 결과를 ResultSet으로 받습니다.
+            rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+            	memberDTO = new MemberDTO(); // null 값인 DTO를 새로 생성
+            	
+            	memberDTO.setName(rs.getString("name"));
+            	memberDTO.setId(rs.getString("id"));
+            	memberDTO.setPwd(rs.getString("pwd"));
+            	memberDTO.setGender(rs.getString("gender"));
+            	memberDTO.setEmail1(rs.getString("email1"));
+            	memberDTO.setEmail2(rs.getString("email2"));
+            	memberDTO.setTel1(rs.getString("tel1"));
+            	memberDTO.setTel2(rs.getString("tel2"));
+            	memberDTO.setTel3(rs.getString("tel3"));
+            	memberDTO.setZipcode(rs.getString("zipcode"));
+            	memberDTO.setAddr1(rs.getString("addr1"));
+            	memberDTO.setAddr2(rs.getString("addr2"));
+            } // rs 의 값이 없으면 null
+		} catch (SQLException e) {
+			
+			e.printStackTrace(); 
+		} finally {
+            // 자원 해제
+            // ResultSet, PreparedStatement, Connection 객체는 사용 후 반드시 닫아야 자원 누수를 방지할 수 있습니다.
+            // ResultSet도 자원을 차지하므로 반드시 닫아야 합니다. 이를 닫지 않으면 시스템 리소스를 낭비하게 됩니다.
+            try {
+                if (rs != null) rs.close();  // ResultSet 해제
+                if (pstmt != null) pstmt.close(); // PreparedStatement 해제
+                if (con != null) con.close();  // Connection 해제
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    	
+    	return memberDTO;
     }
-	    
-	 // 회원 정보를 수정하는 메서드 
-	    public void updateMember(MemberDTO memberDTO) {
-	        String sql = """
-	        		UPDATE member SET NAME = ?, 
+
+    // 회원 정보를 수정하는 메서드 
+    public void updateMember(MemberDTO memberDTO) {
+        String sql = """
+        		UPDATE member SET NAME = ?, 
 		        					  PWD = ?, 
 		        					  GENDER = ?,
 		        		  			  EMAIL1 = ?, 
@@ -328,102 +301,43 @@ public class MemberDAO {
 		        		  			  LOGTIME = sysdate WHERE ID = ?
 		        		 		""";
 
-	        try {
-	            
-	        	// Connection Pool에서 연결을 가져옵니다.
-	            con = ds.getConnection();
-	            
-	            // SQL 쿼리를 준비합니다.
-	            pstmt = con.prepareStatement(sql);
-	            
-	            // PreparedStatement에 각 필드를 바인딩합니다.
-	            pstmt.setString(1, memberDTO.getName());
-	            pstmt.setString(2, memberDTO.getPwd());
-	            pstmt.setString(3, memberDTO.getGender());
-	            pstmt.setString(4, memberDTO.getEmail1());
-	            pstmt.setString(5, memberDTO.getEmail2());
-	            pstmt.setString(6, memberDTO.getTel1());
-	            pstmt.setString(7, memberDTO.getTel2());
-	            pstmt.setString(8, memberDTO.getTel3());
-	            pstmt.setString(9, memberDTO.getZipcode());
-	            pstmt.setString(10, memberDTO.getAddr1());
-	            pstmt.setString(11, memberDTO.getAddr2());
-	            pstmt.setString(12, memberDTO.getId());  // ID는 수정하지 않고 WHERE 조건으로만 사용
-	            
-	            pstmt.executeUpdate(); // 실행
-	            
-	        } catch (SQLException e) {
-	            e.printStackTrace();  // 예외 발생 시 로그 출력
-	            
-	        } finally {
-	            // 자원 해제
-	            try {
-	            	
-	                if (pstmt != null) pstmt.close();  // PreparedStatement 해제
-	                if (con != null) con.close();      // Connection 해제
-	            } catch (SQLException e) {
-	                e.printStackTrace();
-	            }
-	        }
-	    }
+        try {
+            
+        	// Connection Pool에서 연결을 가져옵니다.
+            con = ds.getConnection();
+            
+            // SQL 쿼리를 준비합니다.
+            pstmt = con.prepareStatement(sql);
+            
+            // PreparedStatement에 각 필드를 바인딩합니다.
+            pstmt.setString(1, memberDTO.getName());
+            pstmt.setString(2, memberDTO.getPwd());
+            pstmt.setString(3, memberDTO.getGender());
+            pstmt.setString(4, memberDTO.getEmail1());
+            pstmt.setString(5, memberDTO.getEmail2());
+            pstmt.setString(6, memberDTO.getTel1());
+            pstmt.setString(7, memberDTO.getTel2());
+            pstmt.setString(8, memberDTO.getTel3());
+            pstmt.setString(9, memberDTO.getZipcode());
+            pstmt.setString(10, memberDTO.getAddr1());
+            pstmt.setString(11, memberDTO.getAddr2());
+            pstmt.setString(12, memberDTO.getId());  // ID는 수정하지 않고 WHERE 조건으로만 사용
+            
+            pstmt.executeUpdate(); // 실행
+            
+        } catch (SQLException e) {
+            e.printStackTrace();  // 예외 발생 시 로그 출력
+            
+        } finally {
+            // 자원 해제
+            try {
+            	
+                if (pstmt != null) pstmt.close();  // PreparedStatement 해제
+                if (con != null) con.close();      // Connection 해제
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }
-
-
-
-/*
- * 
- * // JDBC를 사용한 직접적인 DB 연결 예시 (Connection Pool을 사용하지 않는 경우) 
- * // Connection Pool을 사용하지 않는 경우, JDBC 드라이버를 직접 로드하고, 
- * // Connection 객체를 통해 데이터베이스와 연결해야 합니다.
- * 
- * // 1. JDBC 드라이버를 수동으로 로드합니다. 
- * // Class.forName() 메서드를 통해 JDBC 드라이버를 메모리에 로드합니다. 
- * // 이 단계는 드라이버를 사용하기 위한 필수 작업입니다. 
- * try {
- * Class.forName("oracle.jdbc.driver.OracleDriver"); 
- * // Oracle JDBC 드라이버 로드 } catch (ClassNotFoundException e) {
- *  e.printStackTrace(); 
- * // 드라이버 로드 실패 시 예외 처리
- * }
- * 
- * // 2. DB 연결을 수동으로 설정합니다. 
- * // DriverManager.getConnection() 메서드를 사용하여 데이터베이스에 연결합니다. 
- * // 연결할 때는 DB의 URL, 사용자 이름, 비밀번호를 전달해야 합니다. 
- * // 이 경우 연결은 매번 새롭게 생성되며, 재사용되지 않습니다. 
- * Connection conn = null; 
- * try { conn = DriverManager.getConnection(
- * "jdbc:oracle:thin:@localhost:1521:xe", 
- * // 데이터베이스 URL (Oracle) "yourUsername",
- * // DB 사용자 이름 "yourPassword" 
- * // DB 사용자 비밀번호 ); } catch (SQLException e) {
- * e.printStackTrace(); 
- * // DB 연결 실패 시 예외 처리 }
- * 
- * // 3. PreparedStatement 객체를 사용하여 SQL 쿼리를 준비하고 실행합니다.
- *  PreparedStatement pstmt = null; 
- *  try { String sql = "SELECT * FROM member WHERE id = ?";
- *   pstmt = conn.prepareStatement(sql); 
- *   // SQL 쿼리 준비 pstmt.setString(1, "사용자ID"); // 쿼리의 첫 번째 ?에 사용자ID를 바인딩
- * 
- * ResultSet rs = pstmt.executeQuery(); // SQL 실행 및 결과 가져오기
- * 
- * // 4. ResultSet을 통해 쿼리 결과를 처리합니다. while (rs.next()) { // 결과 처리
- *  } // while
- * rs.close(); 
- * // ResultSet 닫기 
- * pstmt.close();
- * // PreparedStatement 닫기
- * 
- * } catch (SQLException e) {
- *  e.printStackTrace(); 
- *  // SQL 실행 중 예외 발생 시 처리 } finally { // 5. DB 연결 해제
- *   // Connection 객체는 사용 후 반드시 닫아줘야 리소스 누수를 방지할 수 있습니다.
- * try { if (conn != null) conn.close(); 
- * // 연결 닫기 } catch (SQLException e) {
- * e.printStackTrace(); } }
- * 
- * // 이 방식은 매번 DB에 연결할 때마다 새로운 Connection 객체를 생성하고 닫아야 하므로 비효율적입니다.
- *  // 이 때문에Connection Pool을 사용하여 효율적으로 DB 연결을 관리하는 것이 더 좋습니다.
- * 
- */
