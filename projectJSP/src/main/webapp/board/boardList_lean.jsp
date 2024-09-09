@@ -3,19 +3,17 @@
 <%@page import="board.dao.BoardDAO_lean"%>
 <%@page import="board.bean.BoardDTO"%>
 <%@page import="java.util.List"%>
+<%@page import="board.bean.BoardPaging"%>
     
     <%
-    // 'pg' 파라미터는 현재 페이지 번호를 의미합니다.
-    // 클라이언트에서 요청한 'pg' 값을 가져옵니다.
-    // 만약 'pg' 파라미터가 null이거나 비어 있을 경우, 기본값을 1로 설정하여 첫 페이지를 의미하도록 합니다.
-    // 즉, 페이지 번호를 클라이언트가 요청하지 않으면 자동으로 1페이지를 보여줍니다.
-    // '?' 연산자는 삼항 연산자로, 조건에 따라 값이 달라집니다.
-    String pgParam = request.getParameter("pg"); 
-    int pg = (pgParam != null && !pgParam.trim().isEmpty()) ? Integer.parseInt(pgParam) : 1; // 'pg'가 null이 아니고 비어있지 않으면 pg 값을 숫자로 변환, 아니면 1
-
+    // 'pg' 파라미터를 request에서 받아옵니다. 이는 현재 페이지 번호를 나타냅니다.
+    // 사용자가 특정 페이지 번호를 클릭했을 때, 그 페이지 번호를 'pg'로 전달받아 처리합니다.
+    int pg = Integer.parseInt(request.getParameter("pg"));
+    
     // 한 페이지당 표시할 게시글 수를 5개로 설정합니다.
     // 따라서 'pg'에 따라 계산된 startNum과 endNum으로 해당 페이지에 표시될 게시글을 가져옵니다.
     int endNum = pg * 5; // 현재 페이지에서 끝 번호를 계산합니다. 5개씩 보여주므로 예를 들어, 1페이지는 1~5번 글을 가져옵니다.
+    // startNum은 endNum에서 4를 뺀 값으로, 예를 들어 1페이지의 경우 1부터 시작하게 됩니다.
     int startNum = endNum - 4; // 시작 번호는 끝 번호에서 4를 뺀 값이 됩니다. 즉, 1페이지는 1번부터 시작하게 됩니다.
 
     // 데이터베이스에서 게시글을 가져오기 위해 BoardDAO_lean 객체를 생성합니다.
@@ -25,6 +23,26 @@
     // 이 메서드는 해당 페이지에 보여줄 게시글을 DB에서 가져오는 역할을 합니다.
     List<BoardDTO> list = boardDAO_lean.boardList(startNum, endNum);
     
+    // 페이징 처리
+    // 전체 게시글 수(totalA)를 가져오기 위해 BoardDAO_lean 클래스의 getTotalA() 메서드를 호출합니다.
+    // 이 값은 전체 페이지 수를 계산하는 데 사용됩니다.
+    int totalA = boardDAO_lean.getTotalA();
+    
+    // BoardPaging 객체를 생성하여 페이징 처리를 설정합니다.
+    BoardPaging boardPaging = new BoardPaging();
+	    
+    // 현재 페이지를 설정합니다. 사용자가 보고 있는 페이지 번호입니다.
+    boardPaging.setCurrentPage(pg);
+    // 페이지 블록 수를 3으로 설정합니다. 즉, 한 번에 3개의 페이지 번호를 보여줍니다.
+    boardPaging.setPageBlock(3);
+    // 한 페이지당 5개의 게시글을 표시하도록 설정합니다.
+    boardPaging.setPageSize(5);
+    // 전체 게시글 수를 설정합니다. 이 값은 전체 페이지 수를 계산하는 데 사용됩니다.
+    boardPaging.setTotalA(totalA);
+    
+    // 페이징 HTML을 생성하는 메서드를 호출합니다.
+    // 이 메서드는 현재 페이지, 총 페이지 수, 그리고 이전/다음 버튼을 포함하는 HTML 코드를 생성합니다.
+    boardPaging.makePagingHTML();
     %>
     
 <!DOCTYPE html>
@@ -36,9 +54,30 @@
 table {
     border-collapse: collapse; /* 테이블의 셀 간 경계선을 하나로 합칩니다 */
 }
-th,td{
+th, td{
     padding:7px; /* 셀 안의 내용을 일정한 간격으로 배치하여 가독성을 높입니다 */
 }
+
+#currentPaging {
+    /* 현재 페이지를 표시하는 스타일 */
+	border: 1px solid blue;
+	color: red;
+	font-size: 15pt;
+	padding: 5px 8px;
+}
+
+#paging {
+    /* 다른 페이지 번호를 표시하는 스타일 */
+	border: 1px solid blue;
+	color: black;
+	font-size: 15pt;
+	padding: 5px 8px;
+}
+
+span:hover {
+	text-decoration: underline; /* 마우스를 올렸을 때 밑줄 표시 */
+}
+
 </style>
 </head>
 <body>
@@ -74,6 +113,21 @@ th,td{
 	<div onclick="location.href='../index.jsp'" align="center" style="cursor: pointer;">
 		index로 
 	</div>
-
+	
+	<hr/> 
+	
+	<!-- 페이징 HTML을 가운데 정렬하여 표시합니다. -->
+	<!-- boardPaging 객체에서 생성된 HTML을 출력하여 페이지 번호와 이전/다음 버튼을 표시합니다. -->
+	<div style="text-align: center; width: 800px; margin-top: 15px;" >
+		<%=boardPaging.getPagingHTML() %>
+	</div>
+	
+<script type="text/javascript">
+    // 페이지 번호를 클릭하면 해당 페이지로 이동하는 함수입니다.
+    function boardPaging(pg){
+        // 사용자가 클릭한 페이지 번호를 'pg' 파라미터로 전달하여 해당 페이지로 이동합니다.
+        location.href = "boardList_lean.jsp?pg=" + pg;
+    };
+</script>
 </body>
 </html>
