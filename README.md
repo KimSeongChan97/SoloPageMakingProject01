@@ -1,12 +1,9 @@
 # Solo Page Making Project 01
 
 ## 프로젝트 개요
-이 프로젝트는 **JSP**와 **Spring Framework**를 기반으로 한 웹 애플리케이션으로, 간단한 회원 관리 및 게시판 기능을 포함하고 있습니다.
-**Java의 MVC 패턴**을 따르며, 데이터 관리를 위한 **Oracle 데이터베이스**와의 연동을 통해 실무 환경에 가까운 설계를 목표로 하였습니다.
+이 프로젝트는 **JSP**와 **Spring Framework**를 기반으로 한 웹 애플리케이션으로, 간단한 회원 관리 및 게시판 기능을 포함하고 있습니다. **Java의 MVC 패턴**을 따르며, 데이터 관리를 위한 **Oracle 데이터베이스**와의 연동을 통해 실무 환경에 가까운 설계를 목표로 하였습니다.
 
-이 프로젝트는 저의 단독 프로젝트로서,
-**웹 애플리케이션의 기본적인 흐름**을 이해하고,
-**백엔드 및 프론트엔드 개발 기술**을 습득하기 위해 진행하였습니다.
+이 프로젝트는 저의 단독 프로젝트로서, **웹 애플리케이션의 기본적인 흐름**을 이해하고, **백엔드 및 프론트엔드 개발 기술**을 습득하기 위해 진행하였습니다.
 
 ## 사용된 기술 스택
 
@@ -51,6 +48,7 @@
 
 ### 폴더 구조
 
+
 - **src/main/java**
   - **board**: 게시판 기능을 담당하는 로직이 위치.
     - **bean**: 게시글 데이터를 관리하는 모델 클래스.
@@ -80,6 +78,13 @@
 
 ## 설치 및 실행 방법
 
+### 1. 프로젝트 클론
+```bash
+git clone https://github.com/KimSeongChan97/SoloPageMakingProject01.git
+
+
+## 설치 및 실행 방법
+
 1. **프로젝트 클론**
     ```bash
     git clone https://github.com/KimSeongChan97/SoloPageMakingProject01.git
@@ -98,92 +103,93 @@
 
 ## Dom Tree
 ```
-└── extracted_projectJSP/
+└── projectJSP/
     ├── .classpath
     ├── .project
     ├── .settings/
-        ├── .jsdtscope
-        ├── org.eclipse.core.resources.prefs
-        ├── org.eclipse.jdt.core.prefs
-        ├── org.eclipse.wst.common.component
-        ├── org.eclipse.wst.common.project.facet.core.xml
-        ├── org.eclipse.wst.jsdt.ui.superType.container
-        ├── org.eclipse.wst.jsdt.ui.superType.name
-    └── build/
-        └── classes/
-            └── board/
-                └── bean/
-                    ├── BoardDTO.class
-                └── dao/
-                    ├── BoardDAO.class
-                    ├── CommentDAO.class
-            └── member/
-                └── bean/
-                    ├── MemberDTO.class
-                └── dao/
-                    ├── MemberDAO.class
-    └── src/
-        └── main/
-            └── java/
-                └── board/
-                    └── bean/
-                        ├── BoardDTO.java
-                    └── dao/
-                        ├── BoardDAO.java
-                        ├── CommentDAO.java
-                └── member/
-                    └── bean/
-                        ├── MemberDTO.java
-                    └── dao/
-                        ├── MemberDAO.java
-            └── SQL/
-                ├── board.sql
-                ├── member.sql
-            └── webapp/
-                ├── index.jsp
-                ├── mainpage.html
-                └── board/
-                    ├── addComment.jsp
-                    ├── boardList.jsp
-                    ├── boardView.jsp
-                    ├── boardWrite.jsp
-                    ├── boardWriteForm.jsp
-                └── css/
-                    ├── boardList.css
-                    ├── boardView.css
-                    ├── boardWrite.css
-                    ├── indexcss.css
-                    ├── logincss.css
-                    ├── mainpage.css
-                    ├── memberWritecss.css
-                    ├── updatecss.css
-                └── image/
-                    ├── back.png
-                    ├── home.png
-                    ├── home2.png
-                    ├── loader.gif
-                └── js/
-                    ├── member.js
-                    ├── script.js
-                └── jsp/
-                    ├── nav.jsp
-                └── member/
-                    ├── checkId.jsp
-                    ├── loginFail.jsp
-                    ├── loginOk.jsp
-                    ├── memberLogin.jsp
-                    ├── memberLoginForm.jsp
-                    ├── memberLogout.jsp
-                    ├── memberUpdate.jsp
-                    ├── memberUpdateForm.jsp
-                    ├── memberWrite.jsp
-                    ├── memberWriteForm.jsp
-                └── META-INF/
-                    ├── context.xml
-                    ├── MANIFEST.MF
-                └── WEB-INF/
-                    ├── web.xml
-                    └── lib/
-                        ├── lombok.jar
-                        ├── ojdbc11.jar
+    │   ├── .jsdtscope
+    │   ├── org.eclipse.core.resources.prefs
+    │   ├── org.eclipse.jdt.core.prefs
+    │   ├── org.eclipse.wst.common.component
+    │   ├── org.eclipse.wst.common.project.facet.core.xml
+    │   ├── org.eclipse.wst.jsdt.ui.superType.container
+    │   ├── org.eclipse.wst.jsdt.ui.superType.name
+    ├── build/
+    │   └── classes/
+    │       └── board/
+    │           ├── bean/
+    │           │   ├── BoardDTO.class
+    │           └── dao/
+    │               ├── BoardDAO.class
+    │               ├── CommentDAO.class
+    │       └── member/
+    │           ├── bean/
+    │           │   ├── MemberDTO.class
+    │           └── dao/
+    │               ├── MemberDAO.class
+    ├── src/
+    │   └── main/
+    │       └── java/
+    │           └── board/
+    │               ├── bean/
+    │               │   ├── BoardDTO.java
+    │               └── dao/
+    │                   ├── BoardDAO.java
+    │                   ├── CommentDAO.java
+    │           └── member/
+    │               ├── bean/
+    │               │   ├── MemberDTO.java
+    │               └── dao/
+    │                   ├── MemberDAO.java
+    │       └── SQL/
+    │           ├── board.sql
+    │           ├── member.sql
+    │       └── webapp/
+    │           ├── index.jsp
+    │           ├── mainpage.html
+    │           └── board/
+    │               ├── addComment.jsp
+    │               ├── boardList.jsp
+    │               ├── boardView.jsp
+    │               ├── boardWrite.jsp
+    │               ├── boardWriteForm.jsp
+    │           └── css/
+    │               ├── boardList.css
+    │               ├── boardView.css
+    │               ├── boardWrite.css
+    │               ├── indexcss.css
+    │               ├── logincss.css
+    │               ├── mainpage.css
+    │               ├── memberWritecss.css
+    │               ├── updatecss.css
+    │           └── image/
+    │               ├── back.png
+    │               ├── home.png
+    │               ├── home2.png
+    │               ├── loader.gif
+    │           └── js/
+    │               ├── member.js
+    │               ├── script.js
+    │           └── jsp/
+    │               ├── nav.jsp
+    │           └── member/
+    │               ├── checkId.jsp
+    │               ├── loginFail.jsp
+    │               ├── loginOk.jsp
+    │               ├── memberLogin.jsp
+    │               ├── memberLoginForm.jsp
+    │               ├── memberLogout.jsp
+    │               ├── memberUpdate.jsp
+    │               ├── memberUpdateForm.jsp
+    │               ├── memberWrite.jsp
+    │               ├── memberWriteForm.jsp
+    ├── META-INF/
+    │   ├── context.xml
+    │   ├── MANIFEST.MF
+    └── WEB-INF/
+        ├── web.xml
+        └── lib/
+            ├── lombok.jar
+            ├── ojdbc11.jar
+
 ```
