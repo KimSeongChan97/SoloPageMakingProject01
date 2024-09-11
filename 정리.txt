@@ -1,0 +1,14 @@
+projectJSP - Connection Pool
+projectMyBatis
+
+기존은
+모델1기법
+->개발속도 빠르다
+->확장성X, 유지보수 X
+
+
+MVC
+ 모델2기법
+ -> 비즈니스 코드(java) 와 프리젠테이션(web) 분리
+
+Spring
