@@ -48,7 +48,7 @@ select * from board;
 -- board 테이블의 모든 데이터를 조회합니다.
 -- 데이터베이스에 저장된 게시글 데이터를 확인할 수 있는 기본적인 쿼리입니다.
 select count(*) from board;
-
+select * from board order by seq desc;
 
 --select * from board_JSP;
 -- board_JSP 테이블에서 모든 데이터를 조회합니다.
