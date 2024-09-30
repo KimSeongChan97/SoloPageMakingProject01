@@ -1,6 +1,8 @@
-## FilmNote 폴더 내의 파일을 통해 Team Project 기여
+-- --------------------------
 
+# FilmNote 폴더 내의 파일을 통해 Team Project 기여
 
+-- --------------------------
 -- ---------------------------
 
 # Solo Page Making Project 02
